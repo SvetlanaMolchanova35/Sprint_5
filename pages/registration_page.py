@@ -34,13 +34,13 @@ class RegistrationPage(BasePage):
                 EC.visibility_of_element_located(RegistrationPageLocators.PASSWORD_ERROR)
             )
             return True
-        except:
+        except Exception:  # Исправлено: было except:
             return False
     
     def get_password_error_text(self):
         """Получение текста ошибки пароля"""
         try:
-            error_element = self.find_element(RegistrationPageLocators.PASSWORD_ERROR, time=3)
+            error_element = self.find_element(RegistrationPageLocators.PASSWORD_ERROR, timeout=3)
             return error_element.text
-        except:
+        except Exception:  # Исправлено: было except:
             return ""

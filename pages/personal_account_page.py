@@ -18,5 +18,5 @@ class PersonalAccountPage(BasePage):
                 EC.visibility_of_element_located(PersonalAccountLocators.PROFILE_INFO)
             )
             return True
-        except:
+        except Exception:  # Исправлено: было except:
             return False

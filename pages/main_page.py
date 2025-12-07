@@ -3,7 +3,6 @@ from locators.main_page_locators import MainPageLocators
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from config import SHORT_TIMEOUT, DEFAULT_TIMEOUT
-import time
 
 class MainPage(BasePage):
     def wait_for_page_load(self):
@@ -11,7 +10,7 @@ class MainPage(BasePage):
         # Ждем пока появится кнопка 'Войти в аккаунт' или 'Личный кабинет'
         try:
             self.find_element(MainPageLocators.LOGIN_BUTTON, timeout=15)
-        except:
+        except Exception:  # Исправлено: было except:
             # Альтернатива: ждем кнопку личного кабинета
             self.find_element(MainPageLocators.PERSONAL_ACCOUNT_BUTTON, timeout=15)
     
@@ -63,7 +62,7 @@ class MainPage(BasePage):
                 EC.visibility_of_element_located(MainPageLocators.ORDER_BUTTON)
             )
             return element.is_displayed()
-        except:
+        except Exception:  # Исправлено: было except:
             return False
     
     def _wait_for_section_active(self, section_name):

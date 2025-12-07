@@ -1,10 +1,13 @@
-import time
 import pytest
 from pages.main_page import MainPage
 from pages.login_page import LoginPage
 from pages.registration_page import RegistrationPage
 from utils.data_generator import DataGenerator
 from config import LOGIN_URL
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from locators.login_page_locators import LoginPageLocators
+from locators.registration_page_locators import RegistrationPageLocators
 
 class TestRegistration:
     def test_successful_registration(self, driver, user_data, main_page, login_page, registration_page):
@@ -13,12 +16,16 @@ class TestRegistration:
         main_page.click_login_button()
         
         # Ждем загрузки страницы логина
-        time.sleep(1)
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located(LoginPageLocators.EMAIL_INPUT)
+        )
         
         login_page.click_register_link()
         
         # Ждем загрузки страницы регистрации
-        time.sleep(1)
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located(RegistrationPageLocators.REGISTER_BUTTON)
+        )
         
         registration_page.register(
             user_data["name"],
@@ -26,8 +33,10 @@ class TestRegistration:
             user_data["password"]
         )
         
-        # Даем время на обработку регистрации
-        time.sleep(3)
+        # Ждем редиректа на страницу входа
+        WebDriverWait(driver, 10).until(
+            EC.url_contains("login")
+        )
         
         # Проверить успешную регистрацию - редирект на страницу входа
         current_url = driver.current_url
@@ -39,12 +48,16 @@ class TestRegistration:
         main_page.click_login_button()
         
         # Ждем загрузки страницы логина
-        time.sleep(1)
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located(LoginPageLocators.EMAIL_INPUT)
+        )
         
         login_page.click_register_link()
         
         # Ждем загрузки страницы регистрации
-        time.sleep(1)
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located(RegistrationPageLocators.REGISTER_BUTTON)
+        )
         
         # Заполнить с коротким паролем (5 символов)
         registration_page.register(
@@ -53,8 +66,10 @@ class TestRegistration:
             "12345"  # Всего 5 символов!
         )
         
-        # Даем время на отображение ошибки
-        time.sleep(1)
+        # Ждем отображения ошибки
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located(RegistrationPageLocators.PASSWORD_ERROR)
+        )
         
         # Проверить отображение ошибки
         error_displayed = registration_page.is_password_error_displayed()

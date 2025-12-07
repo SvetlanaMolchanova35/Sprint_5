@@ -1,5 +1,4 @@
 import pytest
-import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -31,11 +30,7 @@ class TestLogout:
         # Ждем выхода - должна быть страница входа
         WebDriverWait(driver, 10).until(EC.url_contains(LOGIN_URL))
         
-        # Даем время на полную загрузку страницы
-        time.sleep(1)
-        
-        # Проверяем что вышли - на странице входа есть форма логина
-        # Ищем поле email на странице логина
+        # Ждем загрузки страницы логина (появление поля email)
         email_field = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located(LoginPageLocators.EMAIL_INPUT)
         )
