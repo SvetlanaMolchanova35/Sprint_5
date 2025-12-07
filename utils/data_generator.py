@@ -1,18 +1,22 @@
 import random
 import string
+import time
 
 class DataGenerator:
     @staticmethod
     def generate_email(cohort="99"):
-        """Генерация email в формате имя_фамилия_номер_когорты_3цифры@домен"""
+        """Генерация УНИКАЛЬНОГО email"""
         names = ["ivan", "petr", "serg", "alex", "olga", "anna"]
         surnames = ["ivanov", "petrov", "sidorov", "smirnov", "popov"]
         
         name = random.choice(names)
         surname = random.choice(surnames)
-        digits = ''.join(random.choices(string.digits, k=3))
         
-        return f"{name}_{surname}_{cohort}_{digits}@yandex.ru"
+        # Добавляем временную метку для уникальности
+        timestamp = str(int(time.time()))[-6:]  # последние 6 цифр timestamp
+        random_chars = ''.join(random.choices(string.ascii_lowercase, k=2))
+        
+        return f"{name}_{surname}_{cohort}_{timestamp}{random_chars}@yandex.ru"
     
     @staticmethod
     def generate_password(min_length=6):
